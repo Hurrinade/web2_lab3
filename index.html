@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <main class="main-container">
+        <canvas id="clickGame"></canvas>
+    </main>
+
+</body>
+<script>
+
+    let numberOfSquares = 0;
+    let sqauresHit = 0;
+    let listOfSqaures = [];
+
+    let game = {
+        canvas: document.getElementById("clickGame"),
+        start() {
+            this.canvas.width = 500;
+            this.canvas.height = 500;
+            this.ctx = this.canvas.getContext("2d");
+            this.ctx.font = "15px Arial";
+            this.ctx.textAlign = "start";
+            this.eLeft = this.canvas.offsetLeft;
+            this.eTop = this.canvas.offsetTop;
+            // Show the different textAlign values
+            this.frameNo = 0;
+            this.interval = setInterval(updateGameArea, 20);
+        },
+        clear() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+    }
+
+    class Sqaure {
+        constructor(width, height, x, y) {
+            const sqaureSpeed = Math.floor(Math.random() * (4 - 2) + 2);
+            this.width = width;
+            this.height = height;
+            this.speed = sqaureSpeed;
+            this.speed_x = sqaureSpeed;
+            this.speed_y = sqaureSpeed;
+            this.x = x;
+            this.y = y;
+        }
+
+        update() {
+            const ctx = game.ctx;
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.fillStyle = '#FFCC99';
+            ctx.fillRect(this.width / -2, this.height / -2, this.width, this.height);
+            ctx.restore();
+        }
+
+        newPos() {
+            // Left side
+            if (this.x - this.width / Math.abs(this.speed) < 0) {
+                this.speed = this.speed + 0.1;
+                this.speed_x = this.speed;
+            }
+            // Right side 
+            else if ((this.x + this.width / Math.abs(this.speed)) >= game.ctx.canvas.width) {
+                this.speed = this.speed + 0.1;
+                this.speed_x = -this.speed;
+            }
+            // Top side
+            if (this.y - this.height / Math.abs(this.speed) < 0) {
+                this.speed = this.speed + 0.1;
+                this.speed_y = -this.speed;
+            }
+            // Bottom side
+            else if ((this.y + this.height / Math.abs(this.speed)) >= game.ctx.canvas.height) {
+                this.speed = this.speed + 0.1;
+                this.speed_y = this.speed;
+            }
+            this.x += this.speed_x;
+            this.y -= this.speed_y;
+        }
+    }
+
+    function startGame() {
+        numberOfSquares = Math.floor(Math.random() * (10 - 2) + 2);
+
+        for (let i = 0; i < numberOfSquares; i++) {
+            const x = Math.floor(Math.random() * (500 - 0) + 0);
+            const y = Math.floor(Math.random() * (500 - 0) + 0);
+            let sqaure = new Sqaure(40, 40, x, y);
+            listOfSqaures.push(sqaure)
+        }
+
+        game.start();
+
+        game.canvas.addEventListener('click', function (e) {
+            let beforeFilterLength = listOfSqaures.length;
+            listOfSqaures = listOfSqaures.filter(square => !
+                ((e.x >= square.x - 10 && e.x <= square.x + 40) &&
+                    (e.y >= square.y - 10 && e.y <= square.y + 40)
+                ));
+
+            if (listOfSqaures.length != beforeFilterLength) {
+                sqauresHit = numberOfSquares - listOfSqaures.length;
+            }
+        }, false);
+    }
+
+    function updateGameArea() {
+        game.clear();
+        for (let i = 0; i < listOfSqaures.length; i++) {
+            listOfSqaures[i].newPos();
+            listOfSqaures[i].update();
+        }
+
+        game.ctx.fillStyle = 'white';
+        game.ctx.fillText(`Squares created ${numberOfSquares} hit: ${sqauresHit}`, 330, 20)
+    }
+
+    startGame();
+
+</script>
+
+</html>

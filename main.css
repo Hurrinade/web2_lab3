@@ -1,0 +1,9 @@
+* {
+    background-color: rgb(53, 53, 53);
+    margin: 0;
+}
+
+#clickGame {
+    border: 1px solid black;
+    background-color: rgb(39, 98, 125);
+}
