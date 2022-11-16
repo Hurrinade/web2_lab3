@@ -60,22 +60,30 @@
         newPos() {
             // Left side
             if (this.x - this.width / Math.abs(this.speed) < 0) {
-                this.speed = this.speed + 0.2;
+                const speedChange = Math.random() * (0.5 - (-0.5)) + (-0.5)
+
+                this.speed = this.speed + speedChange;
                 this.speed_x = this.speed;
             }
             // Right side 
             else if ((this.x + this.width / Math.abs(this.speed)) >= game.ctx.canvas.width) {
-                this.speed = this.speed + 0.2;
+                const speedChange = Math.random() * (0.5 - (-0.5)) + (-0.5)
+
+                this.speed = this.speed + speedChange;
                 this.speed_x = -this.speed;
             }
             // Top side
             if (this.y - this.height / Math.abs(this.speed) < 0) {
-                this.speed = this.speed + 0.2;
+                const speedChange = Math.random() * (0.5 - (-0.5)) + (-0.5)
+
+                this.speed = this.speed + speedChange;
                 this.speed_y = -this.speed;
             }
             // Bottom side
             else if ((this.y + this.height / Math.abs(this.speed)) >= game.ctx.canvas.height) {
-                this.speed = this.speed + 0.2;
+                const speedChange = Math.random() * (0.5 - (-0.5)) + (-0.5)
+
+                this.speed = this.speed + speedChange;
                 this.speed_y = this.speed;
             }
             this.x += this.speed_x;
